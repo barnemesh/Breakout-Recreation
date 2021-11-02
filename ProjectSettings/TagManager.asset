@@ -7,6 +7,7 @@ TagManager:
   - Paddle
   - Block
   - Middle Block
+  - Ball
   layers:
   - Default
   - TransparentFX
