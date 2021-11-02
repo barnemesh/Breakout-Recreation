@@ -8,6 +8,7 @@ public class PaddleMovementController : MonoBehaviour
 {
     public Rigidbody2D body;
     public float speed = 2.0f;
+    
     private float _currentMovementDirection;
 
     // Update is called once per frame

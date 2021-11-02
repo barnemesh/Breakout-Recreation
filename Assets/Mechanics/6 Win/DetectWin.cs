@@ -9,6 +9,8 @@ public class DetectWin : MonoBehaviour
     public Color initialColor = Color.red;
     public Color winColor = Color.green;
 
+    private bool _gameWon;
+
     private void Start ()
     {
         if ( spriteRenderer == null )
@@ -20,9 +22,10 @@ public class DetectWin : MonoBehaviour
     // Update is called once per frame
     void Update ()
     {
-        if ( spriteRenderer != null && transform.childCount == 0 )
-        {
-            spriteRenderer.color = winColor;
-        }
+        if ( _gameWon || spriteRenderer == null || transform.childCount != 0 )
+            return;
+
+        _gameWon = true;
+        spriteRenderer.color = winColor;
     }
 }

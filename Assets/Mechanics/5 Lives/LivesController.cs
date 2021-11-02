@@ -18,8 +18,11 @@ public class LivesController : MonoBehaviour
         _currentLivesCount = initialLives;
         for ( int i = 0; i < initialLives; i++ )
         {
-            _hearts[i] = Instantiate(heart, transform.position + (transform.right * i),
-                transform.rotation, transform);
+            Transform myTransform = transform;
+            _hearts[i] = Instantiate(heart,
+                myTransform.position + (myTransform.right * i),
+                myTransform.rotation,
+                myTransform);
 
             _hearts[i].SetActive(true);
         }
