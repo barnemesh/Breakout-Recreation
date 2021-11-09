@@ -8,12 +8,7 @@ public class GameManager : MonoBehaviour
 {
     #region Inspector
 
-    [Header("Controllers")]
-    // public BallController ball;
-    //
-    // public PaddleController paddle;
     public LivesUIController lives;
-    // public CreateBrickWall brickCreator = default;
 
     #endregion
 
@@ -35,15 +30,22 @@ public class GameManager : MonoBehaviour
 
     #region Private Fields
 
+    private int _brickCounter;
     private int _lives;
     private bool _gameOngoing = true;
-    private bool _gameWon;
+    private bool _gameWon; //todo: remove this.
     private bool _ballMoving; // todo: change from ball not manager
 
     #endregion
 
 
     #region Properties
+
+    public static int BrickCounter
+    {
+        get => _shared._brickCounter;
+        set => _shared._brickCounter = value;
+    }
 
     public static int Lives
     {
@@ -80,10 +82,10 @@ public class GameManager : MonoBehaviour
         if ( !_gameOngoing )
             return;
 
-        if ( GameWon )
+        if ( _brickCounter == 0 )
         {
             print("WIN!");
-            resetPositions.Invoke(); // todo: reset only paddle?
+            endGame.Invoke();
             _gameOngoing = false;
             return;
         }
@@ -111,9 +113,8 @@ public class GameManager : MonoBehaviour
             return;
         }
 
-        _shared.endGame.Invoke();
         print("Game Over"); //todo: to constant message
+        _shared.endGame.Invoke();
         _shared._gameOngoing = false;
-        GameWon = false;
     }
 }

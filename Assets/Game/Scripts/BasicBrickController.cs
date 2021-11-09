@@ -10,6 +10,7 @@ public class BasicBrickController : MonoBehaviour
     private float _currentScaleModifier;
     private Vector3 _scaleBeforeAnimation;
     private bool _created;
+    private float _waitTime;
 
     //todo: create brick strategy Factory!!
     // todo: register each brick at start!
@@ -19,15 +20,23 @@ public class BasicBrickController : MonoBehaviour
         transform.localScale = Vector3.zero;
     }
 
-    public void BeginBrickCreation ()
+    public void BeginBrickCreation (float waitTime)
     {
+        _waitTime = waitTime;
         _created = true;
     }
 
     private void Update ()
     {
+        // todo: refactor created and waittime.
         if ( !_created || !(_currentScaleModifier < 1) )
             return;
+
+        if ( _waitTime >= 0 )
+        {
+            _waitTime -= Time.deltaTime;
+            return;
+        }
 
         _currentScaleModifier += (Time.deltaTime * scaleSpeed);
         _currentScaleModifier = _currentScaleModifier > 1 ? 1 : _currentScaleModifier;
@@ -41,6 +50,7 @@ public class BasicBrickController : MonoBehaviour
     public virtual void UseBrickStrategy (BallController ball)
     {
         Destroy(gameObject);
+        GameManager.BrickCounter--;
     }
 
     #endregion
