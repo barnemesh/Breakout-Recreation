@@ -5,35 +5,18 @@ using UnityEngine;
 
 public class BasicBrickController : MonoBehaviour
 {
-    public float scaleSpeed = 0.2f;
-    public SpriteRenderer mySpriteRenderer;
-    public Sprite brokenBrick;
+    public float scaleSpeed = 1.5f;
+
     private float _currentScaleModifier;
     private Vector3 _scaleBeforeAnimation;
     private bool _created;
-    private int _hitCounter;
 
     //todo: create brick strategy Factory!!
     // todo: register each brick at start!
-    private void Awake ()
+    void Awake ()
     {
         _scaleBeforeAnimation = transform.localScale;
         transform.localScale = Vector3.zero;
-    }
-
-    private void OnCollisionExit2D (Collision2D other)
-    {
-        if ( other.gameObject.CompareTag("Ball") )
-        {
-            if ( CompareTag("Hard Block") && _hitCounter < 1 )
-            {
-                _hitCounter++;
-                mySpriteRenderer.sprite = brokenBrick;
-                return;
-            }
-
-            Destroy(gameObject);
-        }
     }
 
     public void BeginBrickCreation ()
@@ -55,9 +38,9 @@ public class BasicBrickController : MonoBehaviour
     #region Methods
 
     // yellow for example:
-    public void UseBrickStrategy (BallController ball)
+    public virtual void UseBrickStrategy (BallController ball)
     {
-        ball.SetMaxSpeed();
+        Destroy(gameObject);
     }
 
     #endregion

@@ -23,6 +23,7 @@ public class BallController : MonoBehaviour
     // todo: modifier to enum?
     private int _paddleHitCounter;
     private float _speedModifier = 1.0f;
+    private BallController _myScript;
 
     #endregion
 
@@ -36,6 +37,7 @@ public class BallController : MonoBehaviour
         if ( body == null )
             return;
 
+        _myScript = GetComponent<BallController>();
         _initialPosition = body.transform.position;
         body.Sleep();
     }
@@ -54,12 +56,9 @@ public class BallController : MonoBehaviour
         if ( body == null )
             return;
 
-        // todo: brock strategies!
-        if ( other.gameObject.CompareTag("Middle Block") )
+        if ( other.gameObject.CompareTag("Block") )
         {
-            _paddleHitCounter = 12;
-            _speedModifier = 4.0f;
-            // todo: major refactoring
+            other.gameObject.GetComponent<BasicBrickController>().UseBrickStrategy(_myScript);
         }
 
         Vector2 v = Vector2.zero;
