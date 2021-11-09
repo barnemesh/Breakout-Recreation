@@ -27,6 +27,7 @@ public class CreateBrickWall : MonoBehaviour
 
     private void Start ()
     {
+        
         Vector2 offset = Vector2.zero;
         for ( int row = 0; row < numberOfRows; row++ )
         {

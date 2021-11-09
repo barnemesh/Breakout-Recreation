@@ -61,12 +61,13 @@ public class BallController : MonoBehaviour
             other.gameObject.GetComponent<BasicBrickController>().UseBrickStrategy(_myScript);
         }
 
-        Vector2 v = Vector2.zero;
+        // Vector2 v = Vector2.zero;
         if ( other.gameObject.CompareTag("Paddle") )
         {
-            float distanceFromCenterX = transform.position.x - other.transform.position.x;
-            float percentageOfDistance = distanceFromCenterX / (transform.localScale.x / 2);
-            v.Set(percentageOfDistance, 1);
+            // float distanceFromCenterX = transform.position.x - other.transform.position.x;
+            // float percentageOfDistance = distanceFromCenterX / (transform.localScale.x / 2);
+            // v.Set(percentageOfDistance * 0.5f, 1);
+
             _paddleHitCounter++;
             _speedModifier = _paddleHitCounter switch
             {
@@ -75,14 +76,14 @@ public class BallController : MonoBehaviour
                 var n when n >= 12 => 4.0f,
                 _ => _speedModifier
             };
+            // todo: when max speed, instantiate mirages!
         }
 
-        // todo: without normalizing _ballDirection?
         Vector2 contactNormal = other.GetContact(0).normal;
         _ballDirection = Vector2.Reflect(_ballDirection, contactNormal);
-        _ballDirection += v; // todo: normalize here? keep the direction
-        // todo: or keep _ball direction same as velocity?
-        body.velocity = _ballDirection.normalized * speed * _speedModifier;
+        // _ballDirection = (_ballDirection + v).normalized
+        print(_ballDirection.sqrMagnitude);
+        body.velocity = _ballDirection * speed * _speedModifier;
     }
 
     #endregion
@@ -93,8 +94,9 @@ public class BallController : MonoBehaviour
     public void BeginBallMovement ()
     {
         body.WakeUp();
-        _ballDirection = Random.onUnitSphere; //todo: .normalized?
-        body.velocity = _ballDirection.normalized * speed * _speedModifier;
+        _ballDirection = Random.onUnitSphere;
+        _ballDirection.Normalize();
+        body.velocity = _ballDirection * speed * _speedModifier;
     }
 
     public void ResetBall ()
