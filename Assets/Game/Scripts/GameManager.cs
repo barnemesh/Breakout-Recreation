@@ -1,6 +1,3 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
 
@@ -11,7 +8,6 @@ public class GameManager : MonoBehaviour
     public LivesUIController lives;
 
     #endregion
-
 
     #region UnityEvents
 
@@ -27,6 +23,11 @@ public class GameManager : MonoBehaviour
 
     #endregion
 
+    #region Private Static
+
+    private static GameManager _shared;
+
+    #endregion
 
     #region Private Fields
 
@@ -37,7 +38,6 @@ public class GameManager : MonoBehaviour
     private bool _ballMoving; // todo: change from ball not manager
 
     #endregion
-
 
     #region Properties
 
@@ -53,62 +53,16 @@ public class GameManager : MonoBehaviour
         set => _shared._lives = value;
     }
 
-    public static bool GameWon
-    {
-        get => _shared._gameWon;
-        set => _shared._gameWon = value;
-    }
-
     #endregion
 
+    #region Public Static Functions
 
-    private static GameManager _shared;
-
-    private void Awake ()
-    {
-        _shared = this;
-    }
-
-    // Start is called before the first frame update
-    void Start ()
-    {
-        resetPositions.Invoke();
-        _ballMoving = false;
-    }
-
-    // Update is called once per frame
-    void Update ()
-    {
-        if ( !_gameOngoing )
-            return;
-
-        if ( _brickCounter == 0 )
-        {
-            print("WIN!");
-            endGame.Invoke();
-            _gameOngoing = false;
-            return;
-        }
-
-        if ( !_ballMoving && Input.GetKeyDown(KeyCode.Space) )
-        {
-            beginMovement.Invoke();
-            _ballMoving = true;
-        }
-
-        // todo: press R to manually loose 1 life.
-        if ( _ballMoving && Input.GetKeyDown(KeyCode.R) )
-        {
-            LoseOneLife();
-        }
-    }
-
-    public static void LoseOneLife ()
+    public static void LoseOneLife()
     {
         _shared.lives.RemoveSingleLife();
         _shared.resetPositions.Invoke();
         _shared._ballMoving = false;
-        if ( _shared._lives != 0 )
+        if (_shared._lives != 0)
         {
             return;
         }
@@ -117,4 +71,49 @@ public class GameManager : MonoBehaviour
         _shared.endGame.Invoke();
         _shared._gameOngoing = false;
     }
+
+    #endregion
+
+    #region MonoBehaviour
+
+    private void Awake()
+    {
+        _shared = this;
+    }
+
+    // Start is called before the first frame update
+    void Start()
+    {
+        resetPositions.Invoke();
+        _ballMoving = false;
+    }
+
+    // Update is called once per frame
+    private void Update()
+    {
+        if (!_gameOngoing)
+            return;
+
+        if (_brickCounter == 0)
+        {
+            print("WIN!");
+            endGame.Invoke();
+            _gameOngoing = false;
+            return;
+        }
+
+        if (!_ballMoving && Input.GetKeyDown(KeyCode.Space))
+        {
+            beginMovement.Invoke();
+            _ballMoving = true;
+        }
+
+        // todo: press R to manually loose 1 life.
+        if (_ballMoving && Input.GetKeyDown(KeyCode.R))
+        {
+            LoseOneLife();
+        }
+    }
+
+    #endregion
 }

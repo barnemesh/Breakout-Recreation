@@ -1,32 +1,29 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class BrickFactory : MonoBehaviour
 {
     [SerializeField]
-    public GameObject basicBlock = default;
+    public GameObject basicBlock;
 
     [SerializeField]
-    public GameObject hardBlock = default;
+    public GameObject hardBlock;
 
     [SerializeField]
-    public GameObject middleBlock = default;
+    public GameObject middleBlock;
 
-    public GameObject CreateBlock (string type, Vector2 position)
+    public GameObject CreateBlock(string type, Vector2 position)
     {
-        GameObject brick = null;
+        GameObject brick;
         switch (type)
         {
             case "basic":
-                brick = GameObject.Instantiate(basicBlock, position, Quaternion.identity);
+                brick = Instantiate(basicBlock, position, Quaternion.identity);
                 break;
             case "hard":
-                brick = GameObject.Instantiate(hardBlock, position, Quaternion.identity);
+                brick = Instantiate(hardBlock, position, Quaternion.identity);
                 break;
             case "middle":
-                brick = GameObject.Instantiate(middleBlock, position, Quaternion.identity);
+                brick = Instantiate(middleBlock, position, Quaternion.identity);
                 break;
             default:
                 return null;

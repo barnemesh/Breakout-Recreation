@@ -1,6 +1,3 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
@@ -12,7 +9,6 @@ public class BallController : MonoBehaviour
     public float speed = 1.0f;
 
     #endregion
-
 
     #region Private Fields
 
@@ -27,46 +23,41 @@ public class BallController : MonoBehaviour
 
     #endregion
 
-
     #region MonoBehaviour
 
     // Start is called before the first frame update
-    void Awake ()
+    private void Awake()
     {
-        // todo: add error print?
-        if ( body == null )
-            return;
-
         _myScript = GetComponent<BallController>();
         _initialPosition = body.transform.position;
         body.Sleep();
     }
 
-    private void OnTriggerEnter2D (Collider2D other)
+    private void OnTriggerEnter2D(Collider2D other)
     {
-        if ( other.gameObject.CompareTag("Floor") )
+        if (other.gameObject.CompareTag("Floor"))
         {
             GameManager.LoseOneLife();
         }
     }
 
 
-    private void OnCollisionEnter2D (Collision2D other)
+    private void OnCollisionEnter2D(Collision2D other)
     {
-        if ( body == null )
-            return;
-
-        if ( other.gameObject.CompareTag("Block") )
+        if (other.gameObject.CompareTag("Block"))
         {
             other.gameObject.GetComponent<BasicBrickController>().UseBrickStrategy(_myScript);
         }
 
-        // Vector2 v = Vector2.zero;
-        if ( other.gameObject.CompareTag("Paddle") )
+        Vector2 v = Vector2.zero;
+        if (other.gameObject.CompareTag("Paddle"))
         {
-            // float distanceFromCenterX = transform.position.x - other.transform.position.x;
-            // float percentageOfDistance = distanceFromCenterX / (transform.localScale.x / 2);
-            // v.Set(percentageOfDistance * 0.5f, 1);
+            float ballX = transform.position.x;
+            float paddleX = other.transform.position.x;
+            // float distanceFromCenterX = ballX < paddleX ? ballX - paddleX : paddleX - ballX;
+            float distanceFromCenterX = ballX - paddleX;
+            float percentageOfDistance = distanceFromCenterX / (other.transform.localScale.x / 2);
+            v.Set(percentageOfDistance, 1);
 
             _paddleHitCounter++;
             _speedModifier = _paddleHitCounter switch
@@ -81,17 +72,15 @@ public class BallController : MonoBehaviour
 
         Vector2 contactNormal = other.GetContact(0).normal;
         _ballDirection = Vector2.Reflect(_ballDirection, contactNormal);
-        // _ballDirection = (_ballDirection + v).normalized
-        print(_ballDirection.sqrMagnitude);
+        _ballDirection = (_ballDirection + v).normalized;
         body.velocity = _ballDirection * speed * _speedModifier;
     }
 
     #endregion
 
-
     #region Methods
 
-    public void BeginBallMovement ()
+    public void BeginBallMovement()
     {
         body.WakeUp();
         _ballDirection = Random.onUnitSphere;
@@ -99,18 +88,18 @@ public class BallController : MonoBehaviour
         body.velocity = _ballDirection * speed * _speedModifier;
     }
 
-    public void ResetBall ()
+    public void ResetBall()
     {
         body.transform.position = _initialPosition;
         body.Sleep();
     }
 
-    public void EndGame ()
+    public void EndGame()
     {
-        Destroy(gameObject);
+        gameObject.SetActive(false);
     }
 
-    public void SetMaxSpeed ()
+    public void SetMaxSpeed()
     {
         _speedModifier = 4.0f;
         _paddleHitCounter = 12; // todo: max as constant

@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class LivesUIController : MonoBehaviour
@@ -8,8 +6,7 @@ public class LivesUIController : MonoBehaviour
 
     public GameObject life;
 
-    [SerializeField]
-    private int numberOfLives = 3;
+    [SerializeField] private int numberOfLives = 3;
 
     #endregion
 
@@ -22,16 +19,16 @@ public class LivesUIController : MonoBehaviour
 
 
     // Start is called before the first frame update
-    void Start ()
+    private void Start()
     {
         GameManager.Lives = numberOfLives;
 
         _livesList = new GameObject[numberOfLives];
-        for ( int i = 0; i < numberOfLives; i++ )
+        for (int i = 0; i < numberOfLives; i++)
         {
             Transform myTransform = transform;
             _livesList[i] = Instantiate(life,
-                myTransform.position - (myTransform.up * i) * 0.5f,
+                myTransform.position - myTransform.up * i * 0.5f,
                 myTransform.rotation,
                 myTransform);
 
@@ -39,11 +36,11 @@ public class LivesUIController : MonoBehaviour
         }
     }
 
-    public void RemoveSingleLife ()
+    public void RemoveSingleLife()
     {
         numberOfLives--;
         GameManager.Lives--;
         // todo: animation.
-        Destroy(_livesList[numberOfLives]);
+        _livesList[numberOfLives].SetActive(false);
     }
 }

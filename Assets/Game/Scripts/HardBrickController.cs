@@ -1,20 +1,17 @@
-using System.Collections;
-using System.Collections.Generic;
-using UnityEditor.UIElements;
 using UnityEngine;
 
 public class HardBrickController : BasicBrickController
 {
     [SerializeField]
-    private SpriteRenderer myRenderer = default;
+    private SpriteRenderer myRenderer;
 
-    public Sprite brokenSprite = default;
+    public Sprite brokenSprite;
 
     private bool _notHit = true;
 
-    public override void UseBrickStrategy (BallController ball)
+    public override void UseBrickStrategy(BallController ball)
     {
-        if ( _notHit )
+        if (_notHit)
         {
             _notHit = false;
             myRenderer.sprite = brokenSprite;
