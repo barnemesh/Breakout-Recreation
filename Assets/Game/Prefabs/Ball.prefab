@@ -137,5 +137,3 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   body: {fileID: 5162273610136687725}
   speed: 1
-  paddleScript: {fileID: 0}
-  lives: 3

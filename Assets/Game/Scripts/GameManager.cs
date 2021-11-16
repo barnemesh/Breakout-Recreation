@@ -9,6 +9,7 @@ public class GameManager : MonoBehaviour
 
     #endregion
 
+
     #region UnityEvents
 
     [Header("Events")]
@@ -23,21 +24,24 @@ public class GameManager : MonoBehaviour
 
     #endregion
 
+
     #region Private Static
 
     private static GameManager _shared;
 
     #endregion
 
+
     #region Private Fields
 
     private int _brickCounter;
-    private int _lives;
+    private int _lives; // todo: move to unity event
     private bool _gameOngoing = true;
     private bool _gameWon; //todo: remove this.
     private bool _ballMoving; // todo: change from ball not manager
 
     #endregion
+
 
     #region Properties
 
@@ -55,14 +59,15 @@ public class GameManager : MonoBehaviour
 
     #endregion
 
+
     #region Public Static Functions
 
-    public static void LoseOneLife()
+    public static void LoseOneLife ()
     {
         _shared.lives.RemoveSingleLife();
         _shared.resetPositions.Invoke();
         _shared._ballMoving = false;
-        if (_shared._lives != 0)
+        if ( _shared._lives != 0 )
         {
             return;
         }
@@ -74,27 +79,28 @@ public class GameManager : MonoBehaviour
 
     #endregion
 
+
     #region MonoBehaviour
 
-    private void Awake()
+    private void Awake ()
     {
         _shared = this;
     }
 
     // Start is called before the first frame update
-    void Start()
+    void Start ()
     {
         resetPositions.Invoke();
         _ballMoving = false;
     }
 
     // Update is called once per frame
-    private void Update()
+    private void Update ()
     {
-        if (!_gameOngoing)
+        if ( !_gameOngoing )
             return;
 
-        if (_brickCounter == 0)
+        if ( _brickCounter == 0 )
         {
             print("WIN!");
             endGame.Invoke();
@@ -102,14 +108,14 @@ public class GameManager : MonoBehaviour
             return;
         }
 
-        if (!_ballMoving && Input.GetKeyDown(KeyCode.Space))
+        if ( !_ballMoving && Input.GetKeyDown(KeyCode.Space) )
         {
             beginMovement.Invoke();
             _ballMoving = true;
         }
 
         // todo: press R to manually loose 1 life.
-        if (_ballMoving && Input.GetKeyDown(KeyCode.R))
+        if ( _ballMoving && Input.GetKeyDown(KeyCode.R) )
         {
             LoseOneLife();
         }

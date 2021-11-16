@@ -11,7 +11,7 @@ public class BrickFactory : MonoBehaviour
     [SerializeField]
     public GameObject middleBlock;
 
-    public GameObject CreateBlock(string type, Vector2 position)
+    public GameObject CreateBlock (string type, Vector2 position)
     {
         GameObject brick;
         switch (type)

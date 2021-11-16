@@ -6,7 +6,8 @@ public class LivesUIController : MonoBehaviour
 
     public GameObject life;
 
-    [SerializeField] private int numberOfLives = 3;
+    [SerializeField]
+    private int numberOfLives = 3;
 
     #endregion
 
@@ -19,12 +20,12 @@ public class LivesUIController : MonoBehaviour
 
 
     // Start is called before the first frame update
-    private void Start()
+    private void Start ()
     {
         GameManager.Lives = numberOfLives;
 
         _livesList = new GameObject[numberOfLives];
-        for (int i = 0; i < numberOfLives; i++)
+        for ( int i = 0; i < numberOfLives; i++ )
         {
             Transform myTransform = transform;
             _livesList[i] = Instantiate(life,
@@ -36,11 +37,11 @@ public class LivesUIController : MonoBehaviour
         }
     }
 
-    public void RemoveSingleLife()
+    public void RemoveSingleLife ()
     {
         numberOfLives--;
         GameManager.Lives--;
-        // todo: animation.
-        _livesList[numberOfLives].SetActive(false);
+        LifeParentControl s = _livesList[numberOfLives].GetComponent<LifeParentControl>();
+        s.DisableLife();
     }
 }

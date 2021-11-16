@@ -10,6 +10,7 @@ public class BallController : MonoBehaviour
 
     #endregion
 
+
     #region Private Fields
 
     private Vector2 _ballDirection;
@@ -23,34 +24,35 @@ public class BallController : MonoBehaviour
 
     #endregion
 
+
     #region MonoBehaviour
 
     // Start is called before the first frame update
-    private void Awake()
+    private void Awake ()
     {
         _myScript = GetComponent<BallController>();
         _initialPosition = body.transform.position;
         body.Sleep();
     }
 
-    private void OnTriggerEnter2D(Collider2D other)
+    private void OnTriggerEnter2D (Collider2D other)
     {
-        if (other.gameObject.CompareTag("Floor"))
+        if ( other.gameObject.CompareTag("Floor") )
         {
             GameManager.LoseOneLife();
         }
     }
 
 
-    private void OnCollisionEnter2D(Collision2D other)
+    private void OnCollisionEnter2D (Collision2D other)
     {
-        if (other.gameObject.CompareTag("Block"))
+        if ( other.gameObject.CompareTag("Block") )
         {
             other.gameObject.GetComponent<BasicBrickController>().UseBrickStrategy(_myScript);
         }
 
         Vector2 v = Vector2.zero;
-        if (other.gameObject.CompareTag("Paddle"))
+        if ( other.gameObject.CompareTag("Paddle") )
         {
             float ballX = transform.position.x;
             float paddleX = other.transform.position.x;
@@ -78,9 +80,10 @@ public class BallController : MonoBehaviour
 
     #endregion
 
+
     #region Methods
 
-    public void BeginBallMovement()
+    public void BeginBallMovement ()
     {
         body.WakeUp();
         _ballDirection = Random.onUnitSphere;
@@ -88,18 +91,18 @@ public class BallController : MonoBehaviour
         body.velocity = _ballDirection * speed * _speedModifier;
     }
 
-    public void ResetBall()
+    public void ResetBall ()
     {
         body.transform.position = _initialPosition;
         body.Sleep();
     }
 
-    public void EndGame()
+    public void EndGame ()
     {
         gameObject.SetActive(false);
     }
 
-    public void SetMaxSpeed()
+    public void SetMaxSpeed ()
     {
         _speedModifier = 4.0f;
         _paddleHitCounter = 12; // todo: max as constant

@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 
 public class PaddleController : MonoBehaviour
@@ -6,6 +7,9 @@ public class PaddleController : MonoBehaviour
 
     public Rigidbody2D body;
     public float speed = 2.0f;
+
+    [SerializeField]
+    private Animator myAnimator;
 
     #endregion
 
@@ -18,39 +22,47 @@ public class PaddleController : MonoBehaviour
     #endregion
 
 
-    private void Awake()
+    private void Awake ()
     {
         _initialPosition = body.transform.position;
         body.simulated = false;
     }
 
     // Update is called once per frame
-    private void Update()
+    private void Update ()
     {
         _currentMovementDirection = 0.0f;
-        if (Input.GetKey(KeyCode.LeftArrow))
+        if ( Input.GetKey(KeyCode.LeftArrow) )
         {
             _currentMovementDirection = -1.0f;
         }
 
-        if (Input.GetKey(KeyCode.RightArrow))
+        if ( Input.GetKey(KeyCode.RightArrow) )
         {
             _currentMovementDirection = 1.0f;
         }
     }
 
-    private void FixedUpdate()
+    private void FixedUpdate ()
     {
-        if (!body.simulated)
+        if ( !body.simulated )
             return;
 
         body.AddForce(new Vector2(speed * _currentMovementDirection, 0.0f));
     }
 
-    public void ResetPaddle()
+    public void ResetPaddle ()
     {
         body.transform.position = _initialPosition;
         body.Sleep();
         body.simulated = false;
+    }
+
+    private void OnCollisionExit2D (Collision2D other)
+    {
+        if ( other.gameObject.CompareTag("Ball") )
+        {
+            myAnimator.SetTrigger("Ball Hit");
+        }
     }
 }
