@@ -41,7 +41,7 @@ public class LivesUIController : MonoBehaviour
     {
         numberOfLives--;
         GameManager.Lives--;
-        LifeParentControl s = _livesList[numberOfLives].GetComponent<LifeParentControl>();
-        s.DisableLife();
+        LifeAnimatorScript s = _livesList[numberOfLives].GetComponent<LifeAnimatorScript>();
+        s.DisableAnimation();
     }
 }

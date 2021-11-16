@@ -3,13 +3,6 @@ using UnityEngine.Events;
 
 public class GameManager : MonoBehaviour
 {
-    #region Inspector
-
-    public LivesUIController lives;
-
-    #endregion
-
-
     #region UnityEvents
 
     [Header("Events")]
@@ -21,6 +14,9 @@ public class GameManager : MonoBehaviour
 
     [SerializeField]
     private UnityEvent endGame;
+
+    [SerializeField]
+    private UnityEvent loseOneLife;
 
     #endregion
 
@@ -35,10 +31,9 @@ public class GameManager : MonoBehaviour
     #region Private Fields
 
     private int _brickCounter;
-    private int _lives; // todo: move to unity event
+    private int _lives;
     private bool _gameOngoing = true;
-    private bool _gameWon; //todo: remove this.
-    private bool _ballMoving; // todo: change from ball not manager
+    private bool _ballMoving;
 
     #endregion
 
@@ -64,7 +59,8 @@ public class GameManager : MonoBehaviour
 
     public static void LoseOneLife ()
     {
-        _shared.lives.RemoveSingleLife();
+        //_shared.lives.RemoveSingleLife();
+        _shared.loseOneLife.Invoke();
         _shared.resetPositions.Invoke();
         _shared._ballMoving = false;
         if ( _shared._lives != 0 )
@@ -72,7 +68,7 @@ public class GameManager : MonoBehaviour
             return;
         }
 
-        print("Game Over"); //todo: to constant message
+        print("Game Over");
         _shared.endGame.Invoke();
         _shared._gameOngoing = false;
     }
@@ -114,7 +110,6 @@ public class GameManager : MonoBehaviour
             _ballMoving = true;
         }
 
-        // todo: press R to manually loose 1 life.
         if ( _ballMoving && Input.GetKeyDown(KeyCode.R) )
         {
             LoseOneLife();

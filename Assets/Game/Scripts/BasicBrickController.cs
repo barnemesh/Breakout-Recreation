@@ -9,6 +9,7 @@ public class BasicBrickController : MonoBehaviour
 
     #endregion
 
+
     #region Private Fields
 
     private float _currentScaleModifier;
@@ -18,33 +19,33 @@ public class BasicBrickController : MonoBehaviour
 
     #endregion
 
+
     #region MonoBehaviour
 
-    private void Awake()
+    private void Awake ()
     {
         var transform1 = transform;
         _scaleBeforeAnimation = transform1.localScale;
         transform1.localScale = Vector3.zero;
     }
 
-    private void Start()
+    private void Start ()
     {
         GameManager.BrickCounter++;
     }
 
-    public void BeginBrickCreation(float waitTime)
+    public void BeginBrickCreation (float waitTime)
     {
         _waitTime = waitTime;
         _created = true;
     }
 
-    private void Update()
+    private void Update ()
     {
-        // todo: refactor created and wait time.
-        if (!_created || !(_currentScaleModifier < 1))
+        if ( !_created || !(_currentScaleModifier < 1) )
             return;
 
-        if (_waitTime >= 0)
+        if ( _waitTime >= 0 )
         {
             _waitTime -= Time.deltaTime;
             return;
@@ -57,9 +58,10 @@ public class BasicBrickController : MonoBehaviour
 
     #endregion
 
+
     #region Methods
 
-    public virtual void UseBrickStrategy(BallController ball)
+    public virtual void UseBrickStrategy (BallController ball)
     {
         gameObject.SetActive(false);
         GameManager.BrickCounter--;

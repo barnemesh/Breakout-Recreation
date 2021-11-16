@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
@@ -8,6 +9,9 @@ public class BallController : MonoBehaviour
     public Rigidbody2D body;
     public float speed = 1.0f;
 
+    [SerializeField]
+    private ParticleSystem myParticle;
+
     #endregion
 
 
@@ -17,10 +21,10 @@ public class BallController : MonoBehaviour
 
     private Vector3 _initialPosition;
 
-    // todo: modifier to enum?
     private int _paddleHitCounter;
     private float _speedModifier = 1.0f;
     private BallController _myScript;
+    private bool _emissionEnabled;
 
     #endregion
 
@@ -33,6 +37,11 @@ public class BallController : MonoBehaviour
         _myScript = GetComponent<BallController>();
         _initialPosition = body.transform.position;
         body.Sleep();
+    }
+
+    private void Start ()
+    {
+        myParticle.Stop();
     }
 
     private void OnTriggerEnter2D (Collider2D other)
@@ -56,7 +65,6 @@ public class BallController : MonoBehaviour
         {
             float ballX = transform.position.x;
             float paddleX = other.transform.position.x;
-            // float distanceFromCenterX = ballX < paddleX ? ballX - paddleX : paddleX - ballX;
             float distanceFromCenterX = ballX - paddleX;
             float percentageOfDistance = distanceFromCenterX / (other.transform.localScale.x / 2);
             v.Set(percentageOfDistance, 1);
@@ -69,7 +77,11 @@ public class BallController : MonoBehaviour
                 var n when n >= 12 => 4.0f,
                 _ => _speedModifier
             };
-            // todo: when max speed, instantiate mirages!
+        }
+
+        if ( _speedModifier >= 4.0f && myParticle.isStopped )
+        {
+            myParticle.Play();
         }
 
         Vector2 contactNormal = other.GetContact(0).normal;
@@ -89,12 +101,17 @@ public class BallController : MonoBehaviour
         _ballDirection = Random.onUnitSphere;
         _ballDirection.Normalize();
         body.velocity = _ballDirection * speed * _speedModifier;
+        if ( _speedModifier >= 4.0f && myParticle.isStopped )
+        {
+            myParticle.Play();
+        }
     }
 
     public void ResetBall ()
     {
         body.transform.position = _initialPosition;
         body.Sleep();
+        myParticle.Stop();
     }
 
     public void EndGame ()
@@ -105,7 +122,7 @@ public class BallController : MonoBehaviour
     public void SetMaxSpeed ()
     {
         _speedModifier = 4.0f;
-        _paddleHitCounter = 12; // todo: max as constant
+        _paddleHitCounter = 12;
     }
 
     #endregion
