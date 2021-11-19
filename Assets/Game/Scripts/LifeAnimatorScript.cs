@@ -8,12 +8,15 @@ public class LifeAnimatorScript : MonoBehaviour
     [SerializeField]
     private Animator animator;
 
-    public void DisableAnimation ()
+    [SerializeField]
+    private AudioSource myAudio;
+
+    public void DisableAnimation()
     {
         animator.SetTrigger("Disable");
     }
 
-    public void DisableLife ()
+    public void DisableLife()
     {
         gameObject.SetActive(false);
     }
